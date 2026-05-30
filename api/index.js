@@ -121,9 +121,9 @@ async function start() {
     // Configurar Socket.IO
     setupSocket(io);
 
-    const PORT = process.env.API_PORT || 3000;
+    const PORT = process.env.PORT || process.env.API_PORT || 3000;
     server.listen(PORT, () => {
-      logger.success(`🌐 API corriendo en http://localhost:${PORT}`);
+      logger.success(`🌐 API corriendo en puerto ${PORT}`);
       logger.info(`📡 WebSocket listo en ws://localhost:${PORT}`);
     });
 

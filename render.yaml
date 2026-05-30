@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: wasa-backend-api
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    plan: free
+    envVars:
+      - key: DISCORD_TOKEN
+        sync: false
+      - key: DISCORD_CLIENT_ID
+        value: "1505319757568671744"
+      - key: DISCORD_CLIENT_SECRET
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: API_SECRET_KEY
+        value: wasa_730ff0a8_c439_4d65_a4fa_667c6a7936bb
+      - key: JWT_SECRET
+        value: jwt_premium_730ff0a8_c439_4d65_a4fa_667c6a7936bb
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: DASHBOARD_URL
+        value: https://nutria23.github.io/wasa-dashboard
+      - key: DISCORD_REDIRECT_URI
+        value: https://wasa-backend-api.onrender.com/auth/callback
