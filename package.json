@@ -1,0 +1,27 @@
+{
+  "name": "wasa-discord-bot",
+  "version": "1.0.0",
+  "description": "Bot de Discord premium con sistema de tickets, anti-raid, anti-nuke y dashboard web.",
+  "private": true,
+  "workspaces": [
+    "bot",
+    "api"
+  ],
+  "scripts": {
+    "bot": "node bot/index.js",
+    "api": "node api/index.js",
+    "dev:bot": "nodemon bot/index.js",
+    "dev:api": "nodemon api/index.js",
+    "start": "concurrently \"npm run bot\" \"npm run api\"",
+    "dev": "concurrently \"npm run dev:bot\" \"npm run dev:api\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "Wasa Bot Team",
+  "license": "MIT"
+}

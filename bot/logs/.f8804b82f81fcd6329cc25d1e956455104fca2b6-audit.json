@@ -1,0 +1,25 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "C:\\Users\\artur\\Downloads\\discord bot wasa\\bot\\logs\\.f8804b82f81fcd6329cc25d1e956455104fca2b6-audit.json",
+    "files": [
+        {
+            "date": 1778966769686,
+            "name": "C:\\Users\\artur\\Downloads\\discord bot wasa\\bot\\logs\\error-2026-05-16.log",
+            "hash": "dac937cc0afa777051aa80dc5a79ad767d59aff3e198df2dd90286947f2bf4f6"
+        },
+        {
+            "date": 1780123815953,
+            "name": "C:\\Users\\artur\\Downloads\\discord bot wasa\\bot\\logs\\error-2026-05-29.log",
+            "hash": "2a82369ee000f12a4d743ebe36cc1963ec0b7ad17fc118bc46f90c1c23e9ef4b"
+        },
+        {
+            "date": 1780124452315,
+            "name": "C:\\Users\\artur\\Downloads\\discord bot wasa\\bot\\logs\\error-2026-05-30.log",
+            "hash": "6eeba308244ff34850ce93e609f24805efe617c30c012818682e2fa333faf51d"
+        }
+    ],
+    "hashType": "sha256"
+}

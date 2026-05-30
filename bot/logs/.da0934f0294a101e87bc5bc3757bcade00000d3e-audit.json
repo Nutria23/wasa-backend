@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 30
+    },
+    "auditLog": "C:\\Users\\artur\\OneDrive\\Desktop\\discord bot wasa\\bot\\logs\\.da0934f0294a101e87bc5bc3757bcade00000d3e-audit.json",
+    "files": [
+        {
+            "date": 1780165316100,
+            "name": "C:\\Users\\artur\\OneDrive\\Desktop\\discord bot wasa\\bot\\logs\\error-2026-05-30.log",
+            "hash": "b9ff0132e9b8b5396468354b5b9f267ec4fa42932983f99e3045d816045750f1"
+        }
+    ],
+    "hashType": "sha256"
+}
