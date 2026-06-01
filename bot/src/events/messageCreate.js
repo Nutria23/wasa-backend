@@ -4,6 +4,7 @@
  */
 
 const Guild = require('../models/Guild');
+const Ticket = require('../models/Ticket');
 const logger = require('../utils/logger');
 
 module.exports = {
@@ -19,6 +20,28 @@ module.exports = {
     try {
       const guildConfig = await Guild.findOne({ guildId: message.guild.id });
       if (!guildConfig) return;
+
+      // ─── REGISTRAR MENSAJES DE TICKET ───────────────────────────────
+      // Si el canal es un ticket activo, guardar el mensaje en la DB
+      const activeTicket = await Ticket.findOne({
+        channelId: message.channel.id,
+        guildId: message.guild.id,
+        status: { $in: ['open', 'claimed'] },
+      });
+      if (activeTicket) {
+        await Ticket.findByIdAndUpdate(activeTicket._id, {
+          $push: {
+            messages: {
+              authorId: message.author.id,
+              authorTag: message.author.tag,
+              content: message.content || '[Sin texto]',
+              attachments: message.attachments.map(a => a.url),
+              timestamp: message.createdAt,
+            }
+          },
+          lastActivity: new Date(),
+        });
+      }
 
       // ─── ANTI-SPAM ──────────────────────────────────────────────────
       if (guildConfig.modules.antiSpam && guildConfig.antiSpam?.enabled) {

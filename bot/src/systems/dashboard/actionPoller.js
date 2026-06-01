@@ -20,7 +20,7 @@ module.exports = (client) => {
           } 
           else if (action.action === 'SET_PRESENCE') {
             const { status, activity } = action.payload;
-            const activities = activity ? [{ name: activity, type: 4 }] : [];
+            const activities = activity ? [{ name: 'Custom Status', type: 4, state: activity }] : [];
             client.user.setPresence({
               status: status || 'online',
               activities

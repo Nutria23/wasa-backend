@@ -27,6 +27,7 @@ const statsRoutes = require('./src/routes/stats');
 const botRoutes = require('./src/routes/bot');
 const moderationRoutes = require('./src/routes/moderation');
 const messagesRoutes = require('./src/routes/messages');
+const welcomeRoutes = require('./src/routes/welcome');
 const { setupSocket } = require('./src/socket/socketHandler');
 const { authMiddleware } = require('./src/middleware/auth');
 const { errorHandler } = require('./src/middleware/errorHandler');
@@ -37,9 +38,9 @@ const server = http.createServer(app);
 // ─── SOCKET.IO ────────────────────────────────────────────────────────────────
 const io = new SocketIO(server, {
   cors: {
-    origin: process.env.DASHBOARD_URL || 'http://localhost:5500',
+    origin: '*',
     methods: ['GET', 'POST'],
-    credentials: true,
+    credentials: false,
   },
 });
 
@@ -89,6 +90,7 @@ app.use('/api/stats', authMiddleware, statsRoutes);
 app.use('/api/bot', authMiddleware, botRoutes);
 app.use('/api/moderation', authMiddleware, moderationRoutes);
 app.use('/api/messages', authMiddleware, messagesRoutes);
+app.use('/api/welcome', welcomeRoutes);
 
 // Ruta de salud para Railway/Render
 app.get('/health', (req, res) => {
