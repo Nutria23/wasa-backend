@@ -20,9 +20,10 @@ module.exports = (client) => {
           } 
           else if (action.action === 'SET_PRESENCE') {
             const { status, activity } = action.payload;
+            const activities = activity ? [{ name: activity, type: 4 }] : [];
             client.user.setPresence({
               status: status || 'online',
-              activities: activity ? [{ name: activity }] : []
+              activities
             });
             result = { success: true };
           }
@@ -57,7 +58,17 @@ module.exports = (client) => {
             if (embedData.color) embed.setColor(embedData.color);
             if (embedData.imageUrl) embed.setImage(embedData.imageUrl);
             
-            const msg = await channel.send({ embeds: [embed] });
+            const payload = { embeds: [embed] };
+
+            if (embedData.imageBase64) {
+              const buffer = Buffer.from(embedData.imageBase64.split(',')[1], 'base64');
+              const { AttachmentBuilder } = require('discord.js');
+              const attachment = new AttachmentBuilder(buffer, { name: 'image.png' });
+              embed.setImage('attachment://image.png');
+              payload.files = [attachment];
+            }
+            
+            const msg = await channel.send(payload);
             result = { messageId: msg.id };
           }
           else if (action.action === 'SEND_TICKET_PANEL') {

@@ -46,4 +46,26 @@ router.post('/:guildId/send-ticket-panel', async (req, res) => {
   res.json({ success: true, message: 'Solicitud de panel enviada al bot' });
 });
 
+// Fetch Real Logs
+router.get('/logs', (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+  const logsDir = path.join(__dirname, '../../../bot/logs');
+  if (!fs.existsSync(logsDir)) return res.json({ logs: [] });
+  
+  const files = fs.readdirSync(logsDir).filter(f => f.startsWith('combined-')).sort().reverse();
+  if (files.length === 0) return res.json({ logs: [] });
+  
+  const latestFile = path.join(logsDir, files[0]);
+  const content = fs.readFileSync(latestFile, 'utf8');
+  const lines = content.trim().split('\n').slice(-50);
+  const parsed = lines.map(line => {
+    try {
+      return JSON.parse(line);
+    } catch { return null; }
+  }).filter(Boolean);
+  
+  res.json({ logs: parsed });
+});
+
 module.exports = router;
