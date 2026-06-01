@@ -182,7 +182,7 @@ module.exports = {
         .setDescription(`⚡ Prioridad cambiada a **${priorityMap[priority]}** por <@${interaction.user.id}>`)
         .setTimestamp();
 
-      await interaction.update({ components: [] });
+      await interaction.update({ content: '✅ Prioridad actualizada.', components: [] });
       await interaction.channel.send({ embeds: [embed] });
     }
   },

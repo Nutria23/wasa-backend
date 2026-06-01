@@ -3,6 +3,8 @@
  */
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const fs = require('fs');
 const Ticket = require('../../../bot/src/models/Ticket');
 const { guildMiddleware } = require('../middleware/auth');
 
@@ -38,3 +40,20 @@ router.get('/:guildId/:ticketId', guildMiddleware, async (req, res) => {
 });
 
 module.exports = router;
+
+// GET /api/tickets/:guildId/:ticketId/transcript
+router.get('/:guildId/:ticketId/transcript', guildMiddleware, async (req, res) => {
+  try {
+    const ticket = await Ticket.findOne({ guildId: req.params.guildId, ticketId: req.params.ticketId });
+    if (!ticket) return res.status(404).json({ error: 'Ticket no encontrado' });
+
+    if (!ticket.transcriptFile) return res.status(404).json({ error: 'Transcript no disponible' });
+
+    const filepath = path.join(__dirname, '../../../../bot/transcripts', ticket.transcriptFile);
+    if (!fs.existsSync(filepath)) return res.status(404).json({ error: 'Archivo de transcript no encontrado' });
+
+    res.sendFile(filepath);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
