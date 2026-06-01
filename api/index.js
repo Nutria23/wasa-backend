@@ -53,10 +53,9 @@ app.use(helmet({
 }));
 app.use(compression());
 app.use(cors({
-  origin: [
-    process.env.DASHBOARD_URL || 'http://localhost:5500',
-    'https://localhost:5500',
-  ],
+  origin: function (origin, callback) {
+    callback(null, true);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
 }));
