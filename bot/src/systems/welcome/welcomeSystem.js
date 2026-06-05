@@ -25,7 +25,8 @@ module.exports = {
 
         const bannerUrl = member.guild.bannerURL({ size: 1024, extension: 'png' }) || null;
         const avatarUrl = member.user.displayAvatarURL({ extension: 'png', forceStatic: true });
-        const memberCount = member.guild.memberCount;
+        const freshGuild = await member.guild.fetch();
+        const memberCount = freshGuild.memberCount;
 
         // Generar tarjeta de bienvenida
         const cardBuffer = await generateWelcomeCard({
