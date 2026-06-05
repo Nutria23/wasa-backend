@@ -1,0 +1,3 @@
+[submodule "dashboard/public"]
+	path = dashboard/public
+	url = https://github.com/Nutria23/wasa-dashboard.git

@@ -26,6 +26,7 @@ module.exports = {
       { name: '🛡️ Protegiendo servidores', type: ActivityType.Custom },
       { name: '/help para ayuda', type: ActivityType.Listening },
       { name: '🎫 Sistema de Tickets', type: ActivityType.Playing },
+      { name: '📩 DMs abiertos', type: ActivityType.Listening },
     ];
 
     let activityIndex = 0;

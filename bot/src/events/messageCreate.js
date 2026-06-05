@@ -12,8 +12,13 @@ module.exports = {
   once: false,
 
   async execute(message, client) {
-    // Ignorar bots y mensajes en DM
-    if (message.author.bot || !message.guild) return;
+    // Ignorar bots
+    if (message.author.bot) return;
+
+    // ─── MANEJAR DMs (MENSAJES DIRECTOS AL BOT) ────────────────────
+    if (!message.guild) {
+      return require('../systems/dms/dmSystem').handleDM(message, client);
+    }
     // Ignorar mensajes del sistema
     if (message.system) return;
 

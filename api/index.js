@@ -28,6 +28,7 @@ const botRoutes = require('./src/routes/bot');
 const moderationRoutes = require('./src/routes/moderation');
 const messagesRoutes = require('./src/routes/messages');
 const welcomeRoutes = require('./src/routes/welcome');
+const dmsRoutes = require('./src/routes/dms');
 const { setupSocket } = require('./src/socket/socketHandler');
 const { authMiddleware } = require('./src/middleware/auth');
 const { errorHandler } = require('./src/middleware/errorHandler');
@@ -91,6 +92,7 @@ app.use('/api/bot', authMiddleware, botRoutes);
 app.use('/api/moderation', authMiddleware, moderationRoutes);
 app.use('/api/messages', authMiddleware, messagesRoutes);
 app.use('/api/welcome', welcomeRoutes);
+app.use('/api/dms', dmsRoutes);
 
 // Ruta de salud para Railway/Render
 app.get('/health', (req, res) => {
@@ -142,6 +144,35 @@ async function start() {
   }
 }
 
+/**
+ * Keep-Alive 24/7: Auto-ping para evitar que Render duerma el servicio gratuito
+ * Se hace un ping a sí mismo cada 13 minutos
+ */
+function startKeepAlive() {
+  const https = require('https');
+  const SELF_URL = process.env.RENDER_EXTERNAL_URL || `http://localhost:${process.env.API_PORT || 3000}`;
+
+  setInterval(() => {
+    const start = Date.now();
+    https.get(`${SELF_URL}/health`, (res) => {
+      let data = '';
+      res.on('data', chunk => data += chunk);
+      res.on('end', () => {
+        logger.debug(`Keep-Alive ping completado (${Date.now() - start}ms)`);
+      });
+    }).on('error', (err) => {
+      logger.debug(`Keep-Alive ping falló (esperado si es localhost): ${err.message}`);
+    });
+  }, 13 * 60 * 1000); // Cada 13 minutos
+
+  logger.info('⏰ Keep-Alive 24/7 iniciado (ping cada 13 min)');
+}
+
 start();
+
+// Iniciar keep-alive solo en producción
+if (process.env.NODE_ENV === 'production') {
+  setTimeout(startKeepAlive, 5000); // Esperar 5s a que el servidor esté listo
+}
 
 module.exports = { app, io };

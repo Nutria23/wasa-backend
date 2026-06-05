@@ -1,6 +1,3 @@
-/**
- * Rutas: Tickets
- */
 const express = require('express');
 const router = express.Router();
 const path = require('path');
@@ -8,7 +5,6 @@ const fs = require('fs');
 const Ticket = require('../../../bot/src/models/Ticket');
 const { guildMiddleware } = require('../middleware/auth');
 
-// GET /api/tickets/:guildId
 router.get('/:guildId', guildMiddleware, async (req, res) => {
   try {
     const { status, page = 1, limit = 20 } = req.query;
@@ -28,7 +24,6 @@ router.get('/:guildId', guildMiddleware, async (req, res) => {
   }
 });
 
-// GET /api/tickets/:guildId/:ticketId
 router.get('/:guildId/:ticketId', guildMiddleware, async (req, res) => {
   try {
     const ticket = await Ticket.findOne({ guildId: req.params.guildId, ticketId: req.params.ticketId });
@@ -39,9 +34,6 @@ router.get('/:guildId/:ticketId', guildMiddleware, async (req, res) => {
   }
 });
 
-module.exports = router;
-
-// GET /api/tickets/:guildId/:ticketId/transcript
 router.get('/:guildId/:ticketId/transcript', guildMiddleware, async (req, res) => {
   try {
     const ticket = await Ticket.findOne({ guildId: req.params.guildId, ticketId: req.params.ticketId });
@@ -57,3 +49,5 @@ router.get('/:guildId/:ticketId/transcript', guildMiddleware, async (req, res) =
     res.status(500).json({ error: err.message });
   }
 });
+
+module.exports = router;

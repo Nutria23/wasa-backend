@@ -88,6 +88,13 @@ module.exports = (client) => {
               result = { messageId: msg.id };
             }
           }
+          else if (action.action === 'REPLY_DM') {
+            const { channelId, content } = action.payload;
+            const channel = await client.channels.fetch(channelId).catch(() => null);
+            if (!channel) throw new Error('DM channel not found');
+            const msg = await channel.send(content);
+            result = { messageId: msg.id };
+          }
           else {
             throw new Error('Acción desconocida');
           }

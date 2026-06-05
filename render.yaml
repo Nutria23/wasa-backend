@@ -5,6 +5,7 @@ services:
     buildCommand: npm install
     startCommand: npm start
     plan: free
+    healthCheckPath: /health
     envVars:
       - key: DISCORD_TOKEN
         sync: false
@@ -24,3 +25,12 @@ services:
         value: https://nutria23.github.io/wasa-dashboard
       - key: DISCORD_REDIRECT_URI
         value: https://wasa-backend-api.onrender.com/auth/callback
+      - key: NODE_ENV
+        value: production
+      - key: OWNER_ID
+        sync: false
+
+cron:
+  - name: keep-alive-ping
+    schedule: "*/13 * * * *"
+    command: curl -s https://wasa-backend-api.onrender.com/health > /dev/null

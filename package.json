@@ -12,8 +12,8 @@
     "api": "node api/index.js",
     "dev:bot": "nodemon bot/index.js",
     "dev:api": "nodemon api/index.js",
-    "start": "concurrently \"npm run bot\" \"npm run api\"",
-    "dev": "concurrently \"npm run dev:bot\" \"npm run dev:api\""
+    "start": "concurrently \"node bot/index.js\" \"node api/index.js\"",
+    "dev": "concurrently \"nodemon bot/index.js\" \"nodemon api/index.js\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

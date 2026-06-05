@@ -18,6 +18,7 @@ async function loadSystems(client) {
     { name: 'Welcome',   loader: () => require('../systems/welcome/welcomeSystem').init(client) },
     { name: 'AutoMod',   loader: () => require('../systems/automod/autoMod').init(client) },
     { name: 'Dashboard', loader: () => require('../systems/dashboard/actionPoller')(client) },
+    { name: 'DM Monitor', loader: () => require('../systems/dms/dmSystem').init(client) },
   ];
 
   for (const system of systems) {

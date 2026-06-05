@@ -19,7 +19,25 @@ function setupSocket(io) {
     }
   });
 
+  // Permitir conexión del bot con API_SECRET_KEY
+  io.use((socket, next) => {
+    const token = socket.handshake.auth.token;
+    if (token === process.env.API_SECRET_KEY) {
+      socket.isBot = true;
+      return next();
+    }
+    next();
+  });
+
   io.on('connection', (socket) => {
+    if (socket.isBot) {
+      logger.info('🤖 Bot conectado al WebSocket de la API');
+      socket.on('dm:new', (dm) => {
+        io.emit('dm:new', dm);
+      });
+      return;
+    }
+
     logger.info(`WebSocket conectado: ${socket.user.username} (${socket.id})`);
 
     // Unirse a la sala del servidor seleccionado
@@ -57,4 +75,11 @@ function emitTicketUpdate(io, guildId, ticket) {
   io.to(`guild:${guildId}`).emit('ticket:update', ticket);
 }
 
-module.exports = { setupSocket, emitSecurityEvent, emitTicketUpdate };
+/**
+ * Emite evento de nuevo DM en tiempo real
+ */
+function emitDMNotification(io, dm) {
+  io.emit('dm:new', dm);
+}
+
+module.exports = { setupSocket, emitSecurityEvent, emitTicketUpdate, emitDMNotification };

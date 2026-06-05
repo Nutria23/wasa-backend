@@ -31,6 +31,12 @@ echo [1/3] Instalando dependencias del Bot...
 cd bot
 call npm install
 cd ..
+if %errorlevel% neq 0 (
+    echo.
+    echo [ERROR] Fallo la instalacion del Bot. Revisa la conexion a internet.
+    pause
+    exit /b 1
+)
 
 :: Instalando API
 echo [2/3] Instalando dependencias de la API...
