@@ -72,6 +72,21 @@ UserSchema.methods.addWarn = function(reason, moderatorId, moderatorTag) {
 };
 
 /**
+ * Método: Eliminar warn por índice
+ */
+UserSchema.methods.removeWarnByIndex = function(index) {
+  if (index < 0 || index >= this.warns.length) return null;
+  const removed = this.warns.splice(index, 1)[0];
+  this.warnCount = Math.max(0, this.warnCount - 1);
+  const infIdx = this.infractions.findIndex(i =>
+    i.type === 'warn' && i.reason === removed.reason &&
+    String(i.timestamp) === String(removed.timestamp)
+  );
+  if (infIdx !== -1) this.infractions.splice(infIdx, 1);
+  return this.save();
+};
+
+/**
  * Método: Agregar infracción
  */
 UserSchema.methods.addInfraction = function(type, reason, moderatorId, moderatorTag, duration) {
