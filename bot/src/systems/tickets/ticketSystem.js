@@ -3,6 +3,8 @@
  * Gestión completa de creación, cierre y transcripts
  */
 
+const path = require('path');
+const fs = require('fs');
 const {
   ChannelType, PermissionFlagsBits, ButtonBuilder, ButtonStyle,
   ActionRowBuilder, StringSelectMenuBuilder, ModalBuilder, TextInputBuilder,
@@ -258,6 +260,20 @@ module.exports = {
       closeReason: reason,
       transcriptFile,
     });
+
+    // Enviar transcript al staff que cerró
+    if (transcriptFile) {
+      const transcriptsDir = path.join(__dirname, '../../../transcripts');
+      const filePath = path.join(transcriptsDir, transcriptFile);
+      if (fs.existsSync(filePath)) {
+        const { AttachmentBuilder } = require('discord.js');
+        const attachment = new AttachmentBuilder(filePath);
+        await interaction.user.send({
+          content: `📄 **Transcript del ticket #${ticket.ticketId}** (${guild.name})\nRazón: ${reason}`,
+          files: [attachment],
+        }).catch(() => {});
+      }
+    }
 
     // Enviar log
     await sendTicketLog(guild, guildConfig, 'close', {

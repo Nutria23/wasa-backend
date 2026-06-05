@@ -1,4 +1,5 @@
 const BotAction = require('../../models/BotAction');
+const DirectMessage = require('../../models/DirectMessage');
 const Guild = require('../../models/Guild');
 const logger = require('../../utils/logger');
 const { EmbedBuilder } = require('discord.js');
@@ -89,10 +90,18 @@ module.exports = (client) => {
             }
           }
           else if (action.action === 'REPLY_DM') {
-            const { channelId, content } = action.payload;
+            const { channelId, content, originalMessageId } = action.payload;
             const channel = await client.channels.fetch(channelId).catch(() => null);
             if (!channel) throw new Error('DM channel not found');
             const msg = await channel.send(content);
+            if (originalMessageId) {
+              await DirectMessage.findByIdAndUpdate(originalMessageId, {
+                replied: true,
+                replyContent: content,
+                replyAt: new Date(),
+                repliedBy: action.payload.repliedBy || 'dashboard',
+              });
+            }
             result = { messageId: msg.id };
           }
           else {

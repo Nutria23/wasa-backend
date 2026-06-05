@@ -55,8 +55,8 @@ module.exports = {
       if (ownerId) {
         const owner = await client.users.fetch(ownerId).catch(() => null);
         if (owner) {
-          const notification = `📩 **Nuevo DM** de **${message.author.tag}** (${message.author.id})\n\`\`\`${(message.content || 'Sin texto').slice(0, 200)}\`\`\``;
-          await owner.send(notification).catch(() => {});
+          const preview = (message.content || '').slice(0, 100);
+          await owner.send(`📩 **${message.author.tag}**: ${preview}`).catch(() => {});
         }
       }
 

@@ -94,14 +94,8 @@ router.post('/:messageId/reply', async (req, res) => {
         content,
         authorId: dm.authorId,
         originalMessageId: dm.messageId,
+        repliedBy: req.user.id,
       },
-    });
-
-    await DirectMessage.findByIdAndUpdate(req.params.messageId, {
-      replied: true,
-      replyContent: content,
-      replyAt: new Date(),
-      repliedBy: req.user.id,
     });
 
     res.json({ success: true, message: 'Respuesta encolada para el bot' });
